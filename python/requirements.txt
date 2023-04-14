@@ -13,3 +13,5 @@ torch==1.0.0
 pandas
 scipy
 ipykernel
+gym
+gym[box2d]
