@@ -15,7 +15,8 @@ TAU = 1e-3              # for soft update of target parameters
 LR = 5e-4               # learning rate 
 UPDATE_EVERY = 4        # how often to update the network
 
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+#device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+device = "cpu"
 
 class Agent():
     """Interacts with and learns from the environment."""
@@ -89,10 +90,12 @@ class Agent():
 
         ## TODO: compute and minimize the loss
         "*** YOUR CODE HERE ***"
-        q_hat = self.qnetwork_target(next_states.to(device))
-        q_max = torch.max(q_hat, 1, keepdim=True)[0]
+        #q_hat = self.qnetwork_target(next_states)
+        #q_max = torch.max(q_hat, 1, keepdim=True)[0]
 
-        targets = rewards+ gamma * q_max
+        #targets = rewards + (1 - dones) * (gamma * q_max)
+        actions_max = torch.max(self.qnetwork_local(next_states),1,keepdim=True)[1]
+        targets = rewards + (1- dones)*(gamma * torch.gather(self.qnetwork_target(next_states), 1, actions_max))
 
         predicts = torch.gather(self.qnetwork_local(states), 1, actions)
         loss = ((predicts - targets)**2).mean()

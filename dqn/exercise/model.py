@@ -16,7 +16,7 @@ class QNetwork(nn.Module):
         super(QNetwork, self).__init__()
         self.seed = torch.manual_seed(seed)
         #"*** YOUR CODE HERE ***"
-        num_layers = 3
+        num_layers = 2
         init_hidden_num = 64
         self.hidden_layers = nn.ModuleList([nn.Linear(state_size, init_hidden_num)])
         for i in range(num_layers):
